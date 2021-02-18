@@ -14,18 +14,20 @@ const StyledTextArea = styled.textarea`
     }
 `
 
-const TextArea = ({ handleInputChange }) => {
+const TextArea = ({ handleInputChange, isFinished }) => {
     return (
-        <StyledTextArea onChange={handleInputChange} autoFocus></StyledTextArea>
+        <StyledTextArea disabled={isFinished} onChange={handleInputChange} autoFocus></StyledTextArea>
     )
 }
 
 TextArea.propTypes = {
     handleInputChange: PropTypes.func,
+    isFinished: PropTypes.bool,
 }
 
 TextArea.defaultProps = {
-    handleInputChange: () => { }
+    handleInputChange: () => { },
+    isFinished: false,
 }
 
 export default TextArea;

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import TextBox from "./components/TextBox/TextBox";
 import Timer from "./components/Timer/Timer"
+import WordPerMinute from "./components/WordPerMinute/WordPerMinute"
 import TextArea from './components/TextArea/TextArea'
 
 const Container = styled.div`
@@ -11,15 +12,25 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  width: 100%;
+`
+
 const RANDOM_PARAGRAPH_API_URL = 'https://baconipsum.com/api/';
 
 const App = () => {
+  const MAX_TIME_IN_SECONDS = 3;
   const intervalRef = useRef(null);
   const [randomParagraph, setRandomParagraph] = useState([]);
   const [textColor, setTextColor] = useState([]);
   const [time, setTime] = useState(null);
+  const [wordPerMinute, setWordPerMinute] = useState(0);
   const [error, setError] = useState(null);
-
+  const totalRef = useRef(0);
+  const isFinished = MAX_TIME_IN_SECONDS - time <= 0;
   const getTimerTime = (startTime) => {
     return Math.floor((new Date - startTime) / 1000)
   }
@@ -27,27 +38,41 @@ const App = () => {
   const startTimer = () => {
     const startTime = new Date();
     intervalRef.current = setInterval(() => {
-      setTime(getTimerTime(startTime));
+      if (!isFinished) {
+        setTime(getTimerTime(startTime));
+      }
     }, 1000);
-
   }
 
   const handleInputChange = (e) => {
-    if (!time) {
-      startTimer();
+    if (!isFinished) {
+      if (!time && !intervalRef.current) {
+        startTimer();
+      }
+      const splittedTargetValue = e.target.value.split('');
+      const textColorCopy = [...textColor];
+      totalRef.current = 0;
+      randomParagraph.forEach((value, index) => {
+        if (!splittedTargetValue[index]) {
+          textColorCopy[index] = 'red';
+          setTextColor(textColorCopy);
+        }
+        else if (value === splittedTargetValue[index]) {
+          textColorCopy[index] = 'green';
+          setTextColor(textColorCopy);
+          totalRef.current += 1;
+        }
+        else {
+          textColorCopy[index] = 'red';
+          setTextColor(textColorCopy);
+          totalRef.current += 1;
+        }
+      });
     }
-    const splittedTargetValue = e.target.value.split('');
-    const textColorCopy = [...textColor];
-    randomParagraph.forEach((value, index) => {
-      if (value === splittedTargetValue[index]) {
-        textColorCopy[index] = 'green';
-        setTextColor(textColorCopy)
-      }
-      else {
-        textColorCopy[index] = 'red';
-        setTextColor(textColorCopy)
-      }
-    });
+  }
+
+  const resetAllValues = () => {
+    setTime(null);
   }
 
   useEffect(() => {
@@ -67,14 +92,35 @@ const App = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (isFinished) {
+      console.log("Test")
+      clearInterval(intervalRef.current)
+    }
+    if (time && !isFinished) {
+      console.log("Tests")
+      const timeInMinute = time / 60;
+      const grossWordPerMinute = Math.floor((totalRef.current / 5) / timeInMinute);
+      setWordPerMinute(grossWordPerMinute);
+      if (MAX_TIME_IN_SECONDS - time < 0) {
+        resetAllValues();
+      }
+    }
+  }, [time]);
+
   return (
     <Container>
-      <Timer time={time} />
+      <Header>
+        <Timer timeRemaining={MAX_TIME_IN_SECONDS - time} />
+        <WordPerMinute wordPerMinute={wordPerMinute} />
+      </Header>
+
       { !error
         ? <TextBox textColor={textColor} randomParagraph={randomParagraph} />
         : { error }}
       <TextArea
         handleInputChange={handleInputChange}
+        disabled={isFinished}
       ></TextArea>
     </Container>
   )

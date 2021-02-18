@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Timer = ({ time }) => {
+const Timer = ({ timeRemaining }) => {
     return (
-        <div>{time}</div>
+        <div>{timeRemaining}</div>
     )
 }
 
