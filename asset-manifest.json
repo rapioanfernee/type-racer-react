@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/type-racer-react/static/css/main.59fad155.chunk.css",
-    "main.js": "/type-racer-react/static/js/main.14279d86.chunk.js",
-    "main.js.map": "/type-racer-react/static/js/main.14279d86.chunk.js.map",
+    "main.js": "/type-racer-react/static/js/main.863075c5.chunk.js",
+    "main.js.map": "/type-racer-react/static/js/main.863075c5.chunk.js.map",
     "runtime-main.js": "/type-racer-react/static/js/runtime-main.61b7a3d6.js",
     "runtime-main.js.map": "/type-racer-react/static/js/runtime-main.61b7a3d6.js.map",
     "static/js/2.e404942c.chunk.js": "/type-racer-react/static/js/2.e404942c.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.61b7a3d6.js",
     "static/js/2.e404942c.chunk.js",
     "static/css/main.59fad155.chunk.css",
-    "static/js/main.14279d86.chunk.js"
+    "static/js/main.863075c5.chunk.js"
   ]
 }
