@@ -2,7 +2,7 @@ import React from 'react';
 
 const Timer = ({ timeRemaining }) => {
     return (
-        <div>{timeRemaining}</div>
+        <div>Time Remaining: {timeRemaining} sec/s</div>
     )
 }
 
