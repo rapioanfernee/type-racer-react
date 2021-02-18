@@ -22,7 +22,7 @@ const Header = styled.div`
 const RANDOM_PARAGRAPH_API_URL = 'https://baconipsum.com/api/';
 
 const App = () => {
-  const MAX_TIME_IN_SECONDS = 3;
+  const MAX_TIME_IN_SECONDS = 180;
 
   const [randomParagraph, setRandomParagraph] = useState([]);
   const [textColor, setTextColor] = useState([]);
