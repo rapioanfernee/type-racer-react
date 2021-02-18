@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components'
 
@@ -15,8 +15,18 @@ const StyledTextArea = styled.textarea`
 `
 
 const TextArea = ({ handleInputChange, isFinished }) => {
+    const textAreaRef = useRef(null);
+    useEffect(() => {
+        if (isFinished) {
+            textAreaRef.current.blur();
+        }
+    }, [isFinished])
     return (
-        <StyledTextArea disabled={isFinished} onChange={handleInputChange} autoFocus></StyledTextArea>
+        <StyledTextArea
+            ref={textAreaRef}
+            disabled={isFinished}
+            onChange={handleInputChange}>
+        </StyledTextArea>
     )
 }
 

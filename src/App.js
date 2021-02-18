@@ -31,6 +31,7 @@ const App = () => {
   const [error, setError] = useState(null);
   const totalRef = useRef(0);
   const isFinished = MAX_TIME_IN_SECONDS - time <= 0;
+
   const getTimerTime = (startTime) => {
     return Math.floor((new Date - startTime) / 1000)
   }
@@ -94,11 +95,9 @@ const App = () => {
 
   useEffect(() => {
     if (isFinished) {
-      console.log("Test")
       clearInterval(intervalRef.current)
     }
     if (time && !isFinished) {
-      console.log("Tests")
       const timeInMinute = time / 60;
       const grossWordPerMinute = Math.floor((totalRef.current / 5) / timeInMinute);
       setWordPerMinute(grossWordPerMinute);
@@ -107,7 +106,7 @@ const App = () => {
       }
     }
   }, [time]);
-
+  console.log(isFinished)
   return (
     <Container>
       <Header>
@@ -120,7 +119,7 @@ const App = () => {
         : { error }}
       <TextArea
         handleInputChange={handleInputChange}
-        disabled={isFinished}
+        isFinished={isFinished}
       ></TextArea>
     </Container>
   )
