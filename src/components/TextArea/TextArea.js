@@ -27,6 +27,7 @@ const TextArea = ({ handleInputChange, isFinished, textAreaRef }) => {
             disabled={isFinished}
             onChange={handleInputChange}
             onPaste={(e) => e.preventDefault()}
+            placeholder="Start typing the text above"
         >
         </StyledTextArea>
     )
