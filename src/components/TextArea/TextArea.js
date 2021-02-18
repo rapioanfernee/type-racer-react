@@ -25,7 +25,9 @@ const TextArea = ({ handleInputChange, isFinished, textAreaRef }) => {
         <StyledTextArea
             ref={textAreaRef}
             disabled={isFinished}
-            onChange={handleInputChange}>
+            onChange={handleInputChange}
+            onPaste={(e) => e.preventDefault()}
+        >
         </StyledTextArea>
     )
 }

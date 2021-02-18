@@ -14,6 +14,7 @@ const TextBox = ({ randomParagraph, textColor }) => {
                 style={{
                     color: textColor[index],
                     fontWeight: textColor[index] === 'red' ? 600 : 400,
+                    opacity: textColor[index] === 'red' ? 1 : 0.54,
                 }}
             >
                 {character}

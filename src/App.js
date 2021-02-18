@@ -124,6 +124,13 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    if (completion >= 1) {
+      textAreaRef.current.blur();
+      clearInterval(intervalRef.current)
+    }
+  }, [completion])
+
+  useEffect(() => {
     if (isFinished) {
       clearInterval(intervalRef.current)
     }
