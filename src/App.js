@@ -4,6 +4,7 @@ import TextBox from "./components/TextBox/TextBox";
 import Timer from "./components/Timer/Timer"
 import WordPerMinute from "./components/WordPerMinute/WordPerMinute"
 import TextArea from './components/TextArea/TextArea'
+import Completion from "./components/Completion/Completion"
 
 const Container = styled.div`
   max-width: 1024px;
@@ -14,9 +15,20 @@ const Container = styled.div`
 
 const Header = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   padding: 16px;
   width: 100%;
+`;
+
+const RetryButton = styled.button`
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  border: 1px solid black;
+  cursor: pointer;
+  margin: 8px;
+  &:focus{
+    border: 1px solid grey;
+  }
 `
 
 const RANDOM_PARAGRAPH_API_URL = 'https://baconipsum.com/api/';
@@ -29,7 +41,9 @@ const App = () => {
   const [time, setTime] = useState(null);
   const [error, setError] = useState(null);
   const [wordPerMinute, setWordPerMinute] = useState(0);
+  const [completion, setCompletion] = useState(0);
 
+  const textAreaRef = useRef(null);
   const intervalRef = useRef(null);
   const totalRef = useRef(0);
 
@@ -72,14 +86,24 @@ const App = () => {
           totalRef.current += 1;
         }
       });
+      setCompletion(splittedTargetValue.length / randomParagraph.length)
     }
   }
 
   const resetAllValues = () => {
+    clearInterval(intervalRef.current)
     setTime(null);
+    totalRef.current = 0;
+    intervalRef.current = null;
+    setWordPerMinute(0);
+    setCompletion(0);
+    setTime(null);
+    setError(null);
+    getRandomParagraph()
+    textAreaRef.current.value = '';
   }
 
-  useEffect(() => {
+  const getRandomParagraph = () => {
     const DEFAULT_TYPE = 'all-meat';
     fetch(`${RANDOM_PARAGRAPH_API_URL}?type=${DEFAULT_TYPE}`)
       .then(response => response.json())
@@ -90,7 +114,10 @@ const App = () => {
         setRandomParagraph(splittedParagraph);
       })
       .catch((error) => setError(error));
+  }
 
+  useEffect(() => {
+    getRandomParagraph()
     return () => {
       clearInterval(intervalRef.current)
     }
@@ -115,15 +142,17 @@ const App = () => {
       <Header>
         <Timer timeRemaining={MAX_TIME_IN_SECONDS - time} />
         <WordPerMinute wordPerMinute={wordPerMinute} />
+        <Completion completion={completion} />
       </Header>
-
-      { !error
+      {!error
         ? <TextBox textColor={textColor} randomParagraph={randomParagraph} />
         : { error }}
       <TextArea
         handleInputChange={handleInputChange}
         isFinished={isFinished}
-      ></TextArea>
+        textAreaRef={textAreaRef}
+      />
+      <RetryButton onClick={resetAllValues}>Retry</RetryButton>
     </Container>
   )
 }

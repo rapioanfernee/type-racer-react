@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components'
 
@@ -8,14 +8,14 @@ const StyledTextArea = styled.textarea`
     outline: none;
     height: 8rem;
     resize: none;
-    padding: 16px;
+    padding: 8px;
+    margin: 8px;
     &:focus{
         border-color: black;
     }
 `
 
-const TextArea = ({ handleInputChange, isFinished }) => {
-    const textAreaRef = useRef(null);
+const TextArea = ({ handleInputChange, isFinished, textAreaRef }) => {
     useEffect(() => {
         if (isFinished) {
             textAreaRef.current.blur();
@@ -33,11 +33,13 @@ const TextArea = ({ handleInputChange, isFinished }) => {
 TextArea.propTypes = {
     handleInputChange: PropTypes.func,
     isFinished: PropTypes.bool,
+    textAreaRef: PropTypes.object,
 }
 
 TextArea.defaultProps = {
     handleInputChange: () => { },
     isFinished: false,
+    textAreaRef: {}
 }
 
 export default TextArea;

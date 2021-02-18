@@ -10,10 +10,12 @@ const StyledTextBox = styled.div`
 const TextBox = ({ randomParagraph, textColor }) => {
     const renderParagraph = () => {
         const splittedParagraph = randomParagraph.map((character, index) => (
-            <span style={{
-                color: textColor[index],
-                fontWeight: textColor[index] === 'red' ? 600 : 400,
-            }}>
+            <span
+                style={{
+                    color: textColor[index],
+                    fontWeight: textColor[index] === 'red' ? 600 : 400,
+                }}
+            >
                 {character}
             </span>
         ));

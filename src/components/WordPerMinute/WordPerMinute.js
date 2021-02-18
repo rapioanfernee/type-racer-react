@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const WordPerMinute = ({ wordPerMinute }) => {
     return (
-        <div>WPM (Word per Minute): {wordPerMinute}</div>
+        <div>Average Speed: {wordPerMinute} WPM</div>
     )
 }
 
