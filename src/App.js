@@ -23,13 +23,16 @@ const RANDOM_PARAGRAPH_API_URL = 'https://baconipsum.com/api/';
 
 const App = () => {
   const MAX_TIME_IN_SECONDS = 3;
-  const intervalRef = useRef(null);
+
   const [randomParagraph, setRandomParagraph] = useState([]);
   const [textColor, setTextColor] = useState([]);
   const [time, setTime] = useState(null);
-  const [wordPerMinute, setWordPerMinute] = useState(0);
   const [error, setError] = useState(null);
+  const [wordPerMinute, setWordPerMinute] = useState(0);
+
+  const intervalRef = useRef(null);
   const totalRef = useRef(0);
+
   const isFinished = MAX_TIME_IN_SECONDS - time <= 0;
 
   const getTimerTime = (startTime) => {
@@ -47,7 +50,7 @@ const App = () => {
 
   const handleInputChange = (e) => {
     if (!isFinished) {
-      if (!time && !intervalRef.current) {
+      if (!intervalRef.current) {
         startTimer();
       }
       const splittedTargetValue = e.target.value.split('');
@@ -106,7 +109,7 @@ const App = () => {
       }
     }
   }, [time]);
-  console.log(isFinished)
+
   return (
     <Container>
       <Header>
