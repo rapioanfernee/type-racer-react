@@ -6,7 +6,7 @@ const Completion = ({
 }) => {
     return (
         <div>
-            Completion: {Math.floor(completion * 100)}%
+            Completion: <strong>{Math.floor(completion * 100)}%</strong>
         </div>
     )
 }

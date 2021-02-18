@@ -5,6 +5,8 @@ import Timer from "./components/Timer/Timer"
 import WordPerMinute from "./components/WordPerMinute/WordPerMinute"
 import TextArea from './components/TextArea/TextArea'
 import Completion from "./components/Completion/Completion"
+import MatchHistory from "./components/MatchHistory/MatchHistory"
+import { v4 } from 'uuid';
 
 const Container = styled.div`
   max-width: 1024px;
@@ -29,15 +31,38 @@ const RetryButton = styled.button`
   &:focus{
     border: 1px solid grey;
   }
+`;
+
+const SaveButton = styled.button`
+  background-color: rgb(200,255,200);
+  border-radius: 4px;
+  border: 1px solid black;
+  cursor: pointer;
+  margin: 8px;
+  &:focus{
+    border: 1px solid grey;
+  }
+  &:disabled{
+    pointer-events: none;
+    opacity: 0.54;
+    cursor: initial;
+  }
+`;
+
+const StyledNameInput = styled.input`
+  height: 16px;
+  padding: 4px;
 `
 
 const RANDOM_PARAGRAPH_API_URL = 'https://baconipsum.com/api/';
+const FAKE_SERVER_API = "https://fake-type-racer-server.herokuapp.com/matches"
 
 const App = () => {
   const MAX_TIME_IN_SECONDS = 180;
 
   const [randomParagraph, setRandomParagraph] = useState([]);
   const [textColor, setTextColor] = useState([]);
+  const [matches, setMatches] = useState([]);
   const [time, setTime] = useState(null);
   const [error, setError] = useState(null);
   const [wordPerMinute, setWordPerMinute] = useState(0);
@@ -116,8 +141,36 @@ const App = () => {
       .catch((error) => setError(error));
   }
 
+  const saveCurrentValues = () => {
+    async function postData(url = '', data = {}) {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      return response.json();
+    }
+
+    const form = {
+      id: v4(),
+      wpm: wordPerMinute,
+      playerName: "Guest"
+    };
+    postData(FAKE_SERVER_API, form);
+    setMatches([...matches, form])
+  }
+
+  const fetchMatches = () => {
+    fetch(FAKE_SERVER_API)
+      .then(response => response.json())
+      .then(data => setMatches(data))
+  }
+
   useEffect(() => {
     getRandomParagraph()
+    fetchMatches();
     return () => {
       clearInterval(intervalRef.current)
     }
@@ -147,6 +200,7 @@ const App = () => {
   return (
     <Container>
       <Header>
+        <span>Player Name: <strong>Guest</strong></span>
         <Timer timeRemaining={MAX_TIME_IN_SECONDS - time} />
         <WordPerMinute wordPerMinute={wordPerMinute} />
         <Completion completion={completion} />
@@ -160,6 +214,8 @@ const App = () => {
         textAreaRef={textAreaRef}
       />
       <RetryButton onClick={resetAllValues}>Retry</RetryButton>
+      <SaveButton disabled={!isFinished} onClick={saveCurrentValues}>Save Current WPM</SaveButton>
+      <MatchHistory matches={matches} />
     </Container>
   )
 }
